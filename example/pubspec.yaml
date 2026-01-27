@@ -1,0 +1,25 @@
+name: native_ping_checker_example
+description: Example app for native_ping_checker plugin.
+
+publish_to: 'none'
+
+version: 1.0.0
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  native_ping_checker:
+    path: ../
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/config/

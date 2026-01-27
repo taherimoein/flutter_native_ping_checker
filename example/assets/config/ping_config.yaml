@@ -1,0 +1,17 @@
+# تنظیمات چک کردن اینترنت
+# Internet Checker Configuration
+
+# آدرس IP برای پینگ
+ping_target: "8.8.8.8"
+
+# تعداد پینگ‌ها
+ping_count: 5
+
+# تایم‌اوت هر پینگ به میلی‌ثانیه
+ping_timeout_ms: 2000
+
+# فاصله زمانی بین چک‌ها به ثانیه
+check_interval_seconds: 30
+
+# حداقل تعداد پینگ موفق (اگه 5 باشه یعنی همه باید موفق باشن)
+min_success_count: 5

@@ -1,0 +1,27 @@
+name: native_ping_checker
+description: A Flutter plugin for checking internet connectivity using native ICMP ping. Supports Windows and Android with configurable settings.
+version: 0.0.1
+repository: https://github.com/taherimoein/flutter_native_ping_checker
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+  flutter: ">=3.3.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  plugin_platform_interface: ^2.1.6
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: ir.taherimoein.native_ping_checker
+        pluginClass: NativePingCheckerPlugin
+      windows:
+        pluginClass: NativePingCheckerPluginCApi
