@@ -15,6 +15,7 @@ class NativePingChecker {
   static StreamController<bool>? _connectionController;
   static bool _lastStatus = false;
   static Function(bool isConnected)? _onStatusChangeCallback;
+  static bool _checkInFlight = false;
 
   /// Stream of connection status updates
   static Stream<bool> get connectionStream {
@@ -82,6 +83,10 @@ class NativePingChecker {
   static Future<bool> checkConnection() async {
     _ensureInitialized();
 
+    if (_checkInFlight) {
+      return _lastStatus;
+    }
+    _checkInFlight = true;
     try {
       final bool result = await _channel.invokeMethod(
         'checkInternet',
@@ -92,6 +97,8 @@ class NativePingChecker {
     } catch (e) {
       _lastStatus = false;
       return false;
+    } finally {
+      _checkInFlight = false;
     }
   }
 
@@ -110,15 +117,19 @@ class NativePingChecker {
     // Periodic check
     _periodicTimer = Timer.periodic(
       Duration(seconds: _config!.checkIntervalSeconds),
-      (_) async {
-        final previousStatus = _lastStatus;
-        final isConnected = await checkConnection();
-
-        // Only notify if status changed
-        if (isConnected != previousStatus) {
-          _connectionController?.add(isConnected);
-          onStatusChange?.call(isConnected);
+      (_) {
+        if (_checkInFlight) {
+          return;
         }
+        unawaited((() async {
+          final previousStatus = _lastStatus;
+          final isConnected = await checkConnection();
+
+          if (isConnected != previousStatus) {
+            _connectionController?.add(isConnected);
+            onStatusChange?.call(isConnected);
+          }
+        })());
       },
     );
   }
